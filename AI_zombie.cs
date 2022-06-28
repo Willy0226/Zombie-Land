@@ -7,33 +7,31 @@ using UnityStandardAssets.Characters.FirstPerson;
 public class AI_zombie : MonoBehaviour
 {
     // var
-    public float patrolSpeed = 0.5f; // patrol speed
-    public float chaseSpeed = 1f; // chase speed
-    public float manicSpeed = 2.5f; // manic speed
-    public float health = 60f; // zombie health
-    public float damage = 10f; // zomibe attack damage
-    public float manicDamage = 15; // manic attack damage
-    public float knockbackForce = 30f; // zombie knockback
-    private float fov = 120f; // field of vision
-    private float viewDistance = 10f; // vision distance
-    private float orgin_x; // orginal x-axis (for the self destroy)
-    private float orgin_z; // orginal z-axis (for the self destroy)
-    public GameObject[] bloods; // blood array
-
-    //public int randomMoney = Random.Range(20, 50);  // get random money after zombie die
+    public float patrolSpeed = 0.5f;   // patrol speed
+    public float chaseSpeed = 1f;      // chase speed
+    public float manicSpeed = 2.5f;    // manic speed
+    public float health = 60f;         // zombie health
+    public float damage = 10f;         // zomibe attack damage
+    public float manicDamage = 15;     // manic attack damage
+    public float knockbackForce = 30f; // zombie knockback 
+    private float fov = 120f;          // field of vision
+    private float viewDistance = 10f;  // vision distance
+    private float orgin_x;             // orginal x-axis (for the self destroy) 
+    private float orgin_z;             // orginal z-axis (for the self destroy)
+    public GameObject[] bloods;        // blood array
 
     // timer
-    private float destroyTime = 20f; // self destroy timer
+    private float destroyTime = 20f;  // self destroy timer
 
-    public float attackTime = 0f; // current attack timer
+    public float attackTime = 0f;     // current attack timer
     public float startingTime = 0.5f; // default attack timer
 
-    public float detectTime = 0f; // detecting timer
-    private float loseHold = 3f; // count down hold if zombie lose the player after stop detecting
+    public float detectTime = 0f;     // detecting timer
+    private float loseHold = 3f;      // count down hold if zombie lose the player after stop detecting
 
-    public float manicTime = 0f; // current manic timer
-    private float endTime = 45f; // default manic timer
-
+    public float manicTime = 0f;      // current manic timer
+    private float endTime = 45f;      // default manic timer
+     
     // flag
     public bool isDetecting = false;
     public bool isAware = false;
@@ -64,7 +62,7 @@ public class AI_zombie : MonoBehaviour
     // Radius color set up
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red; // radius color
+        Gizmos.color = Color.red;                                // radius color
         Gizmos.DrawWireSphere(transform.position, attackRadius); // attack radius
         Gizmos.DrawWireSphere(transform.position, patrolRadius); // possible patrol radius
     }
@@ -78,24 +76,23 @@ public class AI_zombie : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         renderer = GetComponent<Renderer>();
         animator = GetComponent<Animator>();
-
         CM = GameObject.Find("Collectibles").GetComponent<Collectible>();
 
         patrolPoint = RandomPoint();
 
         attackTime = startingTime; // attack delay timer initialize
-        manicTime = endTime; // manic  delay timer initialize
-        getNewPosition = true; // set to trur to get first init position
+        manicTime = endTime;       // manic  delay timer initialize
+        getNewPosition = true;     // set to trur to get first init position
     }
 
     public void Update()
     {
-        if (isDead == false)
+        if (isDead == false) // always search the player(vision)
         {
             SearchForPlayer();
-        } // always search the player(vision)
+        } 
 
-        if (isManic == true)
+        if (isManic == true && isDead == false)
         {
             manicTime -= 1 * Time.deltaTime; // manic time countdown
 
@@ -166,10 +163,7 @@ public class AI_zombie : MonoBehaviour
     // vision (if zombie not in the one of thoses condition, then we define isDetecting = false; once !isDetecting, the timer start counting.)
     public void SearchForPlayer()
     {
-        if (
-            Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(fpsc.transform.position))
-            < fov / 2f
-        ) // vision angle condition
+        if (Vector3.Angle(Vector3.forward, transform.InverseTransformPoint(fpsc.transform.position)) <  fov / 2f) // vision angle condition
         {
             if (Vector3.Distance(fpsc.transform.position, transform.position) < viewDistance) // vision distance condition
             {
