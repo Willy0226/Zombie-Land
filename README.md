@@ -55,7 +55,7 @@
   - Help AI find a new patrol path if AI stucks for a few seconds
 
 - SelfDestroy System
-  - Destroy AI itself after a long time stuck
+  - Destroy AI itself after a long time stuck.
   
   
 
